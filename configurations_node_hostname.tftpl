@@ -1,0 +1,4 @@
+#!/bin/bash 
+sudo hostnamectl set-hostname node01
+echo "${kubemaster_ip} kubemaster" | sudo tee -a /etc/hosts
+echo "${node_01_ip} node01" | sudo tee -a /etc/hosts

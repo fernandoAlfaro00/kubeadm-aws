@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  tasks:
+    - name: install containerd
+      yum:
+        state: latest
+        update_cache: yes
+        name:
+         - containerd
+    - name: enable service containerd  and ensure it is not masked
+      systemd:
+        name: containerd
+        enabled: yes
+        state: started
+        masked: no

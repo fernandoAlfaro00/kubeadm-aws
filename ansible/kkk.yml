@@ -1,0 +1,57 @@
+---
+# terraform code no presente paquete por defecto
+- hosts: all
+  become: true
+  become_user: root
+  tasks:
+
+    # - name: install python selinux library required by future ansible modules
+    #   yum:
+    #     name: libselinux-python
+    #     state: present
+    #     update_cache: true
+
+    # - name: Put SELinux in permissive mode, logging actions that would be blocked.
+    #   selinux:
+    #     policy: targeted
+    #     state: permissive
+
+    # - name: Disable SELinux
+    #   selinux:
+    #     state: disabled
+  
+    # - name: Disable swap for current session
+    #   command: swapoff -a
+
+    # - name: Disable swap permanently, persist reboots
+    #   replace:
+    #     path: /etc/fstab
+    #     regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
+    #     replace: '#\1\2\3swap\4'
+    #     backup: yes
+
+    - name: Add repository kubernetes.repo
+      yum_repository:
+        name: kubernetes
+        description: test
+        baseurl: https://pkgs.k8s.io/core:/stable:/v1.29/rpm/
+        enabled: 1
+        gpgcheck: 1
+        gpgkey: https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key
+        exclude: kubelet,kubeadm,kubectl,cri-tools,kubernetes-cni
+
+    - name: Install a list of packages
+      yum:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+        disable_excludes: kubernetes
+
+    - name: enable service kubelet and ensure it is not masked
+      systemd:
+        name: kubelet
+        enabled: yes
+        state: started
+        masked: no

@@ -1,0 +1,5 @@
+[masters]
+ master ansible_host=44.199.205.73 ansible_user=ec2-user ansible_private_key_file=/home/akira/Downloads/kubeadm.pem
+ 
+[all:vars]
+ ansible_python_interpreter=/usr/bin/python3
