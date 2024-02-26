@@ -100,7 +100,7 @@ module "ec2_kubemaster" {
   vpc_security_group_ids      = [module.sg_cluster.security_group_id]
   subnet_id                   = module.vpc.private_subnets[0]
   private_ip                  = "10.0.0.37"
-  user_data                   = templatefile("${path.module}/configurations_master_hostname.tftpl", { kubemaster_ip = "10.0.0.37", node_01_ip = "10.0.0.55" })
+  user_data                   = templatefile("${path.module}/templates/controlplane.sh.tftpl", { kubemaster_ip = "10.0.0.37", node_01_ip = "10.0.0.55" })
   user_data_replace_on_change = true
 
   tags = {
@@ -126,7 +126,7 @@ module "ec2_node" {
   vpc_security_group_ids      = [module.sg_cluster.security_group_id]
   subnet_id                   = module.vpc.private_subnets[1]
   private_ip                  = "10.0.0.55"
-  user_data                   = templatefile("${path.module}/configurations_node_hostname.tftpl", { kubemaster_ip = "10.0.0.37", node_01_ip = "10.0.0.55" })
+  user_data                   = templatefile("${path.module}/templates/worker.sh.tftpl", { kubemaster_ip = "10.0.0.37", node_01_ip = "10.0.0.55" })
   user_data_replace_on_change = true
   tags = {
     Terraform   = "true"

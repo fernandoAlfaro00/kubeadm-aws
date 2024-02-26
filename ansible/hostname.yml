@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  tasks:
+    - hostname:
+      name: kubemaster
+      when: inventory_hostname in groups['controlplane']
+    - hostname:
+      name: worker
+      when: inventory_hostname in groups['node']
+    - lineinfile:
+      path:  /etc/hosts
+      line: '10.0.0.37 node01'
+    - lineinfile:
+      path:  /etc/hosts
+      line: '10.0.0.55 kubemaster'
